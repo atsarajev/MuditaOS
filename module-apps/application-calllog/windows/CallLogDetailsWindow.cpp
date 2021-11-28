@@ -207,6 +207,14 @@ namespace gui
     void CallLogDetailsWindow::onBeforeShow(ShowMode mode, SwitchData *data)
     {
         if (mode == ShowMode::GUI_SHOW_RETURN) {
+            if (auto contact = DBServiceAPI::MatchContactByPhoneNumber(application, record.phoneNumber);
+                contact && !contact->isTemporary()) {
+                record.name = contact->getFormattedName();
+            }
+            else {
+                record.name = UTF8(record.phoneNumber.getFormatted());
+            }
+            setTitle(record.name);
             return;
         }
 
